@@ -1,69 +1,8 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gezeryolu 360 Galeri</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
-    <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; }
-        #panorama { width: 100%; height: 100%; }
-        
-        #gallery-container {
-            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 10px; padding: 10px; background: rgba(0, 0, 0, 0.6);
-            border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000;
-        }
-
-        #gallery-container.hidden { bottom: -120px; opacity: 0; pointer-events: none; }
-
-        .thumb {
-            width: 80px; height: 60px; border-radius: 8px; cursor: pointer;
-            border: 2px solid transparent; transition: all 0.3s; background: #333;
-            display: flex; align-items: center; justify-content: center; color: white;
-            font-weight: bold; font-size: 12px; text-shadow: 1px 1px 2px #000;
-        }
-        .thumb:hover { transform: scale(1.1); border-color: #fff; }
-        .thumb.active { border-color: #007bff; box-shadow: 0 0 15px rgba(0, 123, 255, 0.6); }
-
-        #toggle-btn {
-            position: absolute; bottom: 20px; right: 20px; width: 45px; height: 45px;
-            background: rgba(255, 255, 255, 0.2); border-radius: 50%; border: none;
-            color: white; font-size: 20px; cursor: pointer; z-index: 1001;
-            backdrop-filter: blur(5px); transition: 0.3s;
-        }
-        #toggle-btn:hover { background: rgba(255, 255, 255, 0.4); }
-
-        #title-overlay {
-            position: absolute; top: 20px; left: 20px; color: white;
-            background: rgba(0, 0, 0, 0.4); padding: 5px 15px; border-radius: 20px;
-            font-size: 18px; font-weight: 300; letter-spacing: 1px;
-        }
-    </style>
-</head>
-<body>
-
-<div id="title-overlay">GEZERYOLU | 360° Gözlem</div>
-<div id="panorama"></div>
-
-<button id="toggle-btn" onclick="toggleGallery()">☰</button>
-
-<div id="gallery-container" id="gallery">
-    <div class="thumb active" onclick="loadPanorama('foto1', this)">FOTO 1</div>
-    <div class="thumb" onclick="loadPanorama('foto2', this)">FOTO 2</div>
-    <div class="thumb" onclick="loadPanorama('foto3', this)">FOTO 3</div>
-    <div class="thumb" onclick="loadPanorama('foto4', this)">FOTO 4</div>
-    <div class="thumb" onclick="loadPanorama('foto5', this)">FOTO 5</div>
-    <div class="thumb" onclick="loadPanorama('foto6', this)">FOTO 6</div>
-</div>
-
 <script>
     let viewer = pannellum.viewer('panorama', {
         "type": "multires",
         "multiRes": {
-            "basePath": "Gezer360/foto1", 
+            "basePath": "gezer360/foto1", // Burayı KÜÇÜK harf yaptım, kontrol et!
             "path": "/%l/%s%y_%x",
             "fallbackPath": "/fallback/%s",
             "extension": "jpg",
@@ -80,7 +19,7 @@
         viewer = pannellum.viewer('panorama', {
             "type": "multires",
             "multiRes": {
-                "basePath": "Gezer360/" + id, 
+                "basePath": "gezer360/" + id, // Burayı da KÜÇÜK harf yaptım
                 "path": "/%l/%s%y_%x",
                 "fallbackPath": "/fallback/%s",
                 "extension": "jpg",
@@ -91,16 +30,4 @@
             "autoLoad": true,
             "showZoomCtrl": false
         });
-
-        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    function toggleGallery() {
-        const gallery = document.getElementById('gallery');
-        gallery.classList.toggle('hidden');
-    }
-</script>
-
-</body>
-</html>
+// ... (Kodun geri kalanı aynı) ...
