@@ -10,7 +10,6 @@
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; }
         #panorama { width: 100%; height: 100%; }
         
-        /* Galeri Konteynırı */
         #gallery-container {
             position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
             display: flex; gap: 10px; padding: 10px; background: rgba(0, 0, 0, 0.6);
@@ -18,21 +17,17 @@
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000;
         }
 
-        /* Gizleme Durumu */
         #gallery-container.hidden { bottom: -120px; opacity: 0; pointer-events: none; }
 
-        /* Fotoğraf Seçenekleri (Butonlar) */
         .thumb {
             width: 80px; height: 60px; border-radius: 8px; cursor: pointer;
             border: 2px solid transparent; transition: all 0.3s; background: #333;
             display: flex; align-items: center; justify-content: center; color: white;
             font-weight: bold; font-size: 12px; text-shadow: 1px 1px 2px #000;
-            background-size: cover; background-position: center;
         }
         .thumb:hover { transform: scale(1.1); border-color: #fff; }
         .thumb.active { border-color: #007bff; box-shadow: 0 0 15px rgba(0, 123, 255, 0.6); }
 
-        /* Menü Gizleme/Açma Tuşu */
         #toggle-btn {
             position: absolute; bottom: 20px; right: 20px; width: 45px; height: 45px;
             background: rgba(255, 255, 255, 0.2); border-radius: 50%; border: none;
@@ -41,7 +36,6 @@
         }
         #toggle-btn:hover { background: rgba(255, 255, 255, 0.4); }
 
-        /* Başlık Katmanı */
         #title-overlay {
             position: absolute; top: 20px; left: 20px; color: white;
             background: rgba(0, 0, 0, 0.4); padding: 5px 15px; border-radius: 20px;
@@ -69,7 +63,7 @@
     let viewer = pannellum.viewer('panorama', {
         "type": "multires",
         "multiRes": {
-            "basePath": "gezeryolu/foto1",
+            "basePath": "Gezer360/foto1", 
             "path": "/%l/%s%y_%x",
             "fallbackPath": "/fallback/%s",
             "extension": "jpg",
@@ -78,17 +72,15 @@
             "cubeResolution": 8192
         },
         "autoLoad": true,
-        "orientationOnDeviceHelp": false,
         "showZoomCtrl": false
     });
 
     function loadPanorama(id, el) {
-        // Yeni panoramayı yükle
         viewer.destroy();
         viewer = pannellum.viewer('panorama', {
             "type": "multires",
             "multiRes": {
-                "basePath": "gezeryolu/" + id,
+                "basePath": "Gezer360/" + id, 
                 "path": "/%l/%s%y_%x",
                 "fallbackPath": "/fallback/%s",
                 "extension": "jpg",
@@ -100,13 +92,12 @@
             "showZoomCtrl": false
         });
 
-        // Aktif butonu güncelle
         document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
     }
 
     function toggleGallery() {
-        const gallery = document.getElementById('gallery-container');
+        const gallery = document.getElementById('gallery');
         gallery.classList.toggle('hidden');
     }
 </script>
