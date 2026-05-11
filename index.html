@@ -14,17 +14,32 @@
         
         #panorama { width: 100%; height: 100vh; }
         
-        #title {
-            position: absolute; top: 15px; right: 15px; color: white;
-            background: rgba(0,0,0,0.7); padding: 6px 16px;
-            border-radius: 20px; z-index: 2000; font-size: 13px;
-            border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
+        /* ÜST PANEL: BAŞLIK VE TAM EKRAN */
+        #top-panel {
+            position: absolute; top: 15px; right: 15px;
+            z-index: 2000; display: flex; flex-direction: column;
+            align-items: flex-end; gap: 10px;
         }
 
-        /* SAĞ ALT KÖŞEYE TAŞINAN MENÜ */
+        #title {
+            color: white; background: rgba(0,0,0,0.7); 
+            padding: 6px 16px; border-radius: 20px; 
+            font-size: 13px; border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px); white-space: nowrap;
+        }
+
+        /* ÖZEL TAM EKRAN BUTONU */
+        #custom-fs-btn {
+            width: 40px; height: 40px; background: rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+            color: white; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(5px); font-size: 20px;
+        }
+
+        /* SAĞ ALT KÖŞE MENÜ */
         #menu-container {
-            position: absolute; bottom: 25px; right: 25px; /* Sağ alt köşe */
+            position: absolute; bottom: 25px; right: 25px;
             z-index: 3000; display: flex; flex-direction: column-reverse;
             align-items: flex-end; gap: 12px;
         }
@@ -41,18 +56,13 @@
         #controls {
             display: flex; flex-direction: column;
             gap: 8px; opacity: 0; visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.4s ease;
+            transform: translateY(20px); transition: all 0.4s ease;
             background: rgba(0,0,0,0.6); padding: 10px; border-radius: 15px;
             backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
         }
 
-        #menu-container.active #controls {
-            opacity: 1; visibility: visible; transform: translateY(0);
-        }
-        #menu-container.active #menu-trigger {
-            transform: rotate(45deg); background: #ff4757;
-        }
+        #menu-container.active #controls { opacity: 1; visibility: visible; transform: translateY(0); }
+        #menu-container.active #menu-trigger { transform: rotate(45deg); background: #ff4757; }
 
         .photo-btn {
             background: rgba(255, 255, 255, 0.1); color: white; 
@@ -64,18 +74,21 @@
 
         .photo-btn.active { background: #007bff; border-color: #fff; }
 
-        /* Pannellum Dahili Kontrolleri Gizleme */
-        .pnlm-zoom-controls { display: none !important; } /* Artı eksi tuşları kapandı */
-        .pnlm-compass { bottom: 15px !important; left: 15px !important; } /* Pusula sol altta kalsın */
+        /* KRİTİK: İSTENMEYEN TÜM BUTONLARI VE NAVİGASYONU YOK ET */
+        .pnlm-zoom-controls, .pnlm-fullscreen-ctrl, .pnlm-orientation-button { display: none !important; } 
+        .pnlm-compass { bottom: 20px !important; left: 20px !important; }
+        
     </style>
 </head>
 <body>
 
-    <div id="title">gezeryolu KAMERA</div>
+    <div id="top-panel">
+        <div id="title">gezeryolu KAMERA</div>
+        <button id="custom-fs-btn" onclick="viewer.toggleFullscreen()">⛶</button>
+    </div>
     
     <div id="menu-container">
         <button id="menu-trigger" onclick="toggleMenu()">+</button>
-        
         <div id="controls">
             <button class="photo-btn active" onclick="loadScene('foto1', this)">gezeryolu1</button>
             <button class="photo-btn" onclick="loadScene('foto2', this)">gezeryolu2</button>
@@ -89,9 +102,7 @@
     <div id="panorama"></div>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('menu-container').classList.toggle('active');
-        }
+        function toggleMenu() { document.getElementById('menu-container').classList.toggle('active'); }
 
         var commonConfig = {
             "type": "multires",
@@ -100,17 +111,14 @@
             "minHfov": 50,
             "maxHfov": 120,
             "mouseZoom": true,
-            "showFullscreenCtrl": false,
-            "showZoomCtrl": false, // Kapatıldı
+            "showFullscreenCtrl": false, /* Kendi butonumuzu yaptık */
+            "showZoomCtrl": false,
             "orientationOnByDefault": true,
             "compass": true
         };
 
         var viewer = pannellum.viewer('panorama', {
-            "default": {
-                "firstScene": "foto1",
-                "sceneFadeDuration": 1200
-            },
+            "default": { "firstScene": "foto1", "sceneFadeDuration": 1200 },
             "scenes": {
                 "foto1": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto1", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
                 "foto2": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto2", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
