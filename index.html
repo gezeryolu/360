@@ -1,33 +1,44 @@
-<script>
-    let viewer = pannellum.viewer('panorama', {
-        "type": "multires",
-        "multiRes": {
-            "basePath": "gezer360/foto1", // Burayı KÜÇÜK harf yaptım, kontrol et!
-            "path": "/%l/%s%y_%x",
-            "fallbackPath": "/fallback/%s",
-            "extension": "jpg",
-            "tileResolution": 512,
-            "maxLevel": 4,
-            "cubeResolution": 8192
-        },
-        "autoLoad": true,
-        "showZoomCtrl": false
-    });
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gezeryolu KAMERA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        #panorama { width: 100%; height: 100vh; background: #f4f4f4; }
+        #title {
+            position: absolute; top: 10px; left: 10px; color: white;
+            background: rgba(0,0,0,0.5); padding: 5px 15px;
+            font-family: sans-serif; border-radius: 5px; z-index: 100;
+        }
+    </style>
+</head>
+<body>
 
-    function loadPanorama(id, el) {
-        viewer.destroy();
-        viewer = pannellum.viewer('panorama', {
+    <div id="title">gezeryolu KAMERA</div>
+    <div id="panorama"></div>
+
+    <script>
+        pannellum.viewer('panorama', {
             "type": "multires",
             "multiRes": {
-                "basePath": "gezer360/" + id, // Burayı da KÜÇÜK harf yaptım
+                "basePath": "https://gezeryolu.github.io/360/foto5",
                 "path": "/%l/%s%y_%x",
                 "fallbackPath": "/fallback/%s",
                 "extension": "jpg",
                 "tileResolution": 512,
-                "maxLevel": 4,
+                "maxLevel": 5,
                 "cubeResolution": 8192
             },
             "autoLoad": true,
-            "showZoomCtrl": false
+            "hfov": 100,
+            "minHfov": 10,  /* Daha fazla zoom için */
+            "maxHfov": 120
         });
-// ... (Kodun geri kalanı aynı) ...
+    </script>
+
+</body>
+</html>
