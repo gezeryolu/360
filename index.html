@@ -1,44 +1,64 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>gezeryolu KAMERA</title>
+    <title>Gezeryolu 360 Viewer</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
-        #panorama { width: 100%; height: 100vh; background: #f4f4f4; }
-        #title {
-            position: absolute; top: 10px; left: 10px; color: white;
-            background: rgba(0,0,0,0.5); padding: 5px 15px;
-            font-family: sans-serif; border-radius: 5px; z-index: 100;
+        #panorama {
+            width: 100%;
+            height: 100vh;
+        }
+        /* Kontrolleri sağ alt köşeye dikey olarak taşıma */
+        .pnlm-controls {
+            left: auto !important;
+            right: 10px !important;
+            bottom: 20px !important;
+            top: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 5px;
+        }
+        /* Butonların estetiğini iyileştirme */
+        .pnlm-control {
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        /* Tam ekran butonu için özel konum */
+        .pnlm-fullscreen-toggle-button {
+            order: -1; /* En üste alır */
         }
     </style>
 </head>
 <body>
 
-    <div id="title">gezeryolu KAMERA</div>
-    <div id="panorama"></div>
+<div id="panorama"></div>
 
-    <script>
-        pannellum.viewer('panorama', {
-            "type": "multires",
-            "multiRes": {
-                "basePath": "https://gezeryolu.github.io/360/foto5",
-                "path": "/%l/%s%y_%x",
-                "fallbackPath": "/fallback/%s",
-                "extension": "jpg",
-                "tileResolution": 512,
-                "maxLevel": 5,
-                "cubeResolution": 8192
-            },
-            "autoLoad": true,
-            "hfov": 100,
-            "minHfov": 10,  /* Daha fazla zoom için */
-            "maxHfov": 120
-        });
-    </script>
+<script>
+pannellum.viewer('panorama', {
+    "type": "equirectangular",
+    "panorama": "FOTOGRAF_YOLUNU_BURAYA_YAZ.jpg", // Kendi fotoğraf linkini buraya ekle
+    "autoLoad": true,
+    "autoRotate": -2, // Yavaşça kendi kendine döner, daha profesyonel durur
+    "title": "Gezeryolu 360° Kamera",
+    "author": "İlyas Gezer",
+    
+    /* Zoom Ayarları */
+    "minHfov": 10,  // Çok daha fazla yakınlaştırma sağlar (Standart 50'dir)
+    "maxHfov": 120, // Uzaklaşma sınırı
+    "hfov": 100,    // Başlangıç zoom seviyesi
+
+    /* Ekstra Özellikler */
+    "compass": true,        // Pusula ekler
+    "mouseZoom": true,      // Mouse tekerleği ile zoom aktif
+    "showFullscreenCtrl": true,
+    "showZoomCtrl": true,
+    "orientationOnByDefault": true // Mobil cihazda jiroskopu otomatik açar
+});
+</script>
 
 </body>
 </html>
