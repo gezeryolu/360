@@ -15,20 +15,32 @@
             font-family: sans-serif; border-radius: 5px; z-index: 100;
         }
 
-        /* ARAÇLARI SAĞ ALT KÖŞEYE DİKEY TAŞIMA */
+        /* TÜM ARAÇLARI SAĞ ALTTA TOPLAYAN ÖZEL CSS */
+        
+        /* 1. Zoom ve Tam Ekran Butonlarını Sağ Alta Al */
         .pnlm-controls {
             left: auto !important;
             right: 10px !important;
-            bottom: 10px !important;
             top: auto !important;
+            bottom: 10px !important;
             display: flex !important;
-            flex-direction: column !important;
-            gap: 2px;
+            flex-direction: column-reverse !important; /* Butonları dikey dizer */
+            gap: 5px;
         }
-        /* Butonları biraz daha belirgin yapalım */
+
+        /* 2. Pusulayı Sağ Alta, Butonların Hemen Üstüne Al */
+        .pnlm-compass {
+            right: 15px !important;
+            left: auto !important;
+            top: auto !important;
+            bottom: 120px !important; /* Butonların üzerine binmemesi için pay */
+        }
+
+        /* Butonların görünümünü biraz daha modern yapalım */
         .pnlm-control {
-            background-color: rgba(0, 0, 0, 0.6) !important;
-            border-radius: 4px !important;
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 6px !important;
         }
     </style>
 </head>
@@ -50,18 +62,18 @@
                 "cubeResolution": 8192
             },
             "autoLoad": true,
-            /* ZOOM AYARLARI */
+            /* ZOOM AYARLARI - Maksimum Yakınlaştırma */
             "hfov": 100,
-            "minHfov": 5,   /* Zoom kapasitesini 10'dan 5'e çekerek daha da artırdım */
+            "minHfov": 2,   /* En yüksek zoom seviyesi, inanılmaz yaklaşır */
             "maxHfov": 120,
             
-            /* YENİ VE DAHA İYİ ÖZELLİKLER */
-            "autoRotate": -2,         /* Sayfa açıldığında manzara yavaşça döner */
-            "compass": true,          /* Nereye baktığını anlaman için pusula ekler */
-            "mouseZoom": true,        /* Mouse tekerleği ile zoom yapmanı sağlar */
-            "orientationOnByDefault": true, /* Telefondan bakarken telefonu çevirince manzara döner */
-            "showFullscreenCtrl": true, /* Tam ekran butonu */
-            "showZoomCtrl": true       /* Zoom butonlarını gösterir */
+            /* DİĞER ÖZELLİKLER */
+            "autoRotate": -1,        /* Çok yavaş ve estetik bir dönüş */
+            "compass": true,         /* Pusula (Sağ altta dikey hizada) */
+            "mouseZoom": true,
+            "orientationOnByDefault": true, /* Jiroskop desteği */
+            "showFullscreenCtrl": true,
+            "showZoomCtrl": true
         });
     </script>
 
