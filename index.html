@@ -7,91 +7,98 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #000; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; background: #000; }
         #panorama { width: 100%; height: 100vh; }
         
-        /* BAŞLIK */
         #title {
-            position: absolute; top: 15px; right: 15px; color: white;
-            background: rgba(0,0,0,0.8); padding: 10px 20px;
-            border-radius: 12px; z-index: 1000; font-weight: bold;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px); /* Arkayı hafif bulanıklaştırır, daha modern durur */
+            position: absolute; top: 10px; right: 10px; color: white;
+            background: rgba(0,0,0,0.6); padding: 5px 15px;
+            border-radius: 20px; z-index: 1000; font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        /* YENİ KAYDIRILABİLİR BUTON KUTUSU */
-        #controls-container {
-            position: absolute; bottom: 30px; left: 50%;
-            transform: translateX(-50%); /* Ortalar */
-            z-index: 1000; width: 90%; max-width: 500px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px; border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
+        /* MİNİMALİST MENÜ YAPISI */
+        #menu-container {
+            position: absolute; bottom: 20px; left: 20px;
+            z-index: 1000; display: flex; align-items: center; gap: 10px;
         }
 
+        /* ANA TETİKLEYİCİ BUTON (PARMAKLA DOKUNULACAK KISIM) */
+        #menu-trigger {
+            width: 45px; height: 45px; border-radius: 50%;
+            background: #007bff; color: white; border: none;
+            cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        /* FOTOĞRAF LİSTESİ - BAŞLANGIÇTA GİZLİ */
         #controls {
-            display: flex; gap: 10px; overflow-x: auto; /* Yatay kaydırma */
-            scrollbar-width: none; /* Firefox için scroll gizle */
-            -ms-overflow-style: none; /* IE için scroll gizle */
-            padding: 5px;
+            display: flex; gap: 8px; opacity: 0; visibility: hidden;
+            transform: translateX(-20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(0,0,0,0.5); padding: 5px; border-radius: 10px;
+            backdrop-filter: blur(5px);
         }
 
-        #controls::-webkit-scrollbar { display: none; } /* Chrome/Safari için scroll gizle */
+        /* MENÜ AÇIKKENKİ HALİ */
+        #menu-container.active #controls {
+            opacity: 1; visibility: visible; transform: translateX(0);
+        }
+
+        #menu-container.active #menu-trigger { transform: rotate(45deg); background: #444; }
 
         .photo-btn {
-            flex: 0 0 auto; /* Butonların daralmasını engeller */
-            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.3);
-            padding: 10px 20px; cursor: pointer; border-radius: 8px; font-size: 14px;
-            transition: all 0.3s ease; white-space: nowrap;
+            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.4);
+            padding: 8px 15px; cursor: pointer; border-radius: 8px; font-size: 13px;
+            transition: 0.3s; white-space: nowrap;
         }
 
-        .photo-btn:hover { background: rgba(255, 255, 255, 0.2); border-color: white; }
-        .photo-btn.active { background: #007bff; border-color: #007bff; box-shadow: 0 0 10px rgba(0,123,255,0.5); }
+        .photo-btn.active { background: #007bff; border-color: #007bff; }
 
-        /* NETLİK İÇİN CSS OPTİMİZASYONU */
-        .pnlm-render-container {
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-        }
+        /* Netlik için render iyileştirmesi */
+        .pnlm-render-container { image-rendering: -webkit-optimize-contrast; }
     </style>
 </head>
 <body>
 
     <div id="title">gezeryolu KAMERA</div>
     
-    <div id="controls-container">
+    <div id="menu-container">
+        <button id="menu-trigger" onclick="toggleMenu()">+</button>
+        
         <div id="controls">
-            <button class="photo-btn" onclick="loadScene('foto1', this)">Foto 1</button>
-            <button class="photo-btn" onclick="loadScene('foto2', this)">Foto 2</button>
-            <button class="photo-btn" onclick="loadScene('foto3', this)">Foto 3</button>
-            <button class="photo-btn" onclick="loadScene('foto4', this)">Foto 4</button>
-            <button class="photo-btn active" onclick="loadScene('foto5', this)">Foto 5</button>
-            <button class="photo-btn" onclick="loadScene('foto6', this)">Foto 6</button>
+            <button class="photo-btn active" onclick="loadScene('foto1', this)">F1</button>
+            <button class="photo-btn" onclick="loadScene('foto2', this)">F2</button>
+            <button class="photo-btn" onclick="loadScene('foto3', this)">F3</button>
+            <button class="photo-btn" onclick="loadScene('foto4', this)">F4</button>
+            <button class="photo-btn" onclick="loadScene('foto5', this)">F5</button>
+            <button class="photo-btn" onclick="loadScene('foto6', this)">F6</button>
         </div>
     </div>
 
     <div id="panorama"></div>
 
     <script>
+        function toggleMenu() {
+            document.getElementById('menu-container').classList.toggle('active');
+        }
+
         var commonConfig = {
             "type": "multires",
             "autoLoad": true,
             "hfov": 100,
-            "minHfov": 30, // Çok fazla uzaklaşıp bozulmayı engeller
+            "minHfov": 30,
             "maxHfov": 120,
             "mouseZoom": true,
             "showFullscreenCtrl": true,
-            "showZoomCtrl": true,
-            "orientationOnByDefault": true,
-            "dynamicUpdate": true, // Netlik için önemli
-            "friction": 0.1 // Daha yumuşak kayma hissi
+            "showZoomCtrl": false, // Alan kazanmak için zoom butonlarını kapattım
+            "orientationOnByDefault": true
         };
 
         var viewer = pannellum.viewer('panorama', {
             "default": {
-                "firstScene": "foto5",
-                "sceneFadeDuration": 1200
+                "firstScene": "foto1", // İstediğin gibi Foto 1 ile başlıyor
+                "sceneFadeDuration": 1000
             },
             "scenes": {
                 "foto1": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto1", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
@@ -105,13 +112,10 @@
 
         function loadScene(id, btnElement) {
             viewer.loadScene(id);
-            // Tüm butonlardan active sınıfını kaldır
             document.querySelectorAll('.photo-btn').forEach(btn => btn.classList.remove('active'));
-            // Tıklanan butona active sınıfını ekle
             btnElement.classList.add('active');
-            
-            // Mobilde tıklanan butonu kutu içinde görünür alana kaydırır
-            btnElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            // Fotoğraf seçilince menüyü otomatik kapatmak istersen:
+            // toggleMenu(); 
         }
     </script>
 
