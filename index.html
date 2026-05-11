@@ -10,35 +10,17 @@
         body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
         #panorama { width: 100%; height: 100vh; background: #f4f4f4; }
         
-        /* BAŞLIK SOL ÜSTTE SABİT */
+        /* BAŞLIĞI SAĞ ÜST KÖŞEYE TAŞIDIK */
         #title {
-            position: absolute; top: 10px; left: 10px; color: white;
-            background: rgba(0,0,0,0.5); padding: 5px 15px;
-            font-family: sans-serif; border-radius: 5px; z-index: 100;
-        }
-
-        /* TÜM ARAÇLARI SAĞ ALTA TAŞIYAN GRUP */
-        .pnlm-ui .pnlm-controls {
-            left: auto !important;
-            right: 10px !important;
-            top: auto !important;
-            bottom: 10px !important;
-            display: flex !important;
-            flex-direction: column-reverse !important; /* Zoom ve Tam Ekran butonlarını üst üste dizer */
-            gap: 5px;
-        }
-
-        /* PUSULAYI DA SAĞ ALTA (BUTONLARIN ÜSTÜNE) AL */
-        .pnlm-compass {
-            left: auto !important;
-            right: 15px !important;
-            top: auto !important;
-            bottom: 110px !important; /* Butonlarla çakışmaması için mesafe */
-        }
-
-        /* Butonların şıklığı için küçük dokunuş */
-        .pnlm-control {
-            background-color: rgba(0, 0, 0, 0.7) !important;
+            position: absolute; 
+            top: 10px; 
+            right: 10px; /* 'left' yerine 'right' yaparak sağa aldık */
+            color: white;
+            background: rgba(0,0,0,0.5); 
+            padding: 5px 15px;
+            font-family: sans-serif; 
+            border-radius: 5px; 
+            z-index: 100;
         }
     </style>
 </head>
@@ -60,15 +42,12 @@
                 "cubeResolution": 8192
             },
             "autoLoad": true,
-            "hfov": 100,      /* Netlik için başlangıç açısı (senin orijinal değerin) */
-            "minHfov": 5,      /* Zoom seviyesi (çok daha fazla yaklaşabilirsin) */
+            "hfov": 100,
+            "minHfov": 5, /* Zoom kapasitesini yüksek tuttuk */
             "maxHfov": 120,
-            
-            /* EK ARAÇLAR */
-            "compass": true,
+            "mouseZoom": true,
             "showFullscreenCtrl": true,
             "showZoomCtrl": true,
-            "mouseZoom": true,
             "orientationOnByDefault": true
         });
     </script>
