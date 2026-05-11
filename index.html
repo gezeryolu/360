@@ -22,12 +22,23 @@
             backdrop-filter: blur(5px);
         }
 
-        /* TÜM KONTROLLERİN TOPLANDIĞI SAĞ ALT MENÜ */
-        #menu-container {
+        /* YAN YANA DURAN ANA KONTROL PANELİ */
+        #main-ui-layer {
             position: absolute; bottom: 25px; right: 25px;
-            z-index: 3000; display: flex; flex-direction: column-reverse;
-            align-items: flex-end; gap: 12px;
+            z-index: 3000; display: flex; align-items: flex-end; gap: 10px;
         }
+
+        /* KÜÇÜK YAN BUTONLAR (Pusula ve Tam Ekran) */
+        .side-tool-btn {
+            width: 45px; height: 45px; border-radius: 50%;
+            background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer; font-size: 20px; display: flex;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(5px); transition: 0.3s;
+        }
+
+        /* ANA MAVİ ARTI BUTONU VE ÜSTÜNE AÇILAN LİSTE */
+        #menu-container { display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 12px; }
 
         #menu-trigger {
             width: 55px; height: 55px; border-radius: 50%;
@@ -56,17 +67,9 @@
             font-size: 14px; transition: 0.3s; white-space: nowrap;
             text-align: center; min-width: 110px;
         }
-
-        /* TAM EKRAN VE PUSULA İÇİN ÖZEL BUTON STİLİ */
-        .special-btn {
-            background: #28a745; /* Yeşil tonu ile ayırt edilsin */
-            font-weight: bold;
-            border: 1px solid #fff;
-        }
-
         .photo-btn.active { background: #007bff; border-color: #fff; }
 
-        /* SOL ALTTAKİ NAVİGASYON VE TÜM GEREKSİZLERİ SİL */
+        /* SİSTEM KONTROLLERİNİ GİZLE */
         .pnlm-zoom-controls, .pnlm-fullscreen-ctrl, .pnlm-orientation-button, .pnlm-compass { 
             display: none !important; 
         } 
@@ -77,20 +80,21 @@
 
     <div id="title">gezeryolu KAMERA</div>
     
-    <div id="menu-container">
-        <button id="menu-trigger" onclick="toggleMenu()">+</button>
-        <div id="controls">
-            <button class="photo-btn special-btn" onclick="viewer.toggleFullscreen()">TAM EKRAN ⛶</button>
-            <button class="photo-btn special-btn" onclick="toggleCompass()">PUSULA 🧭</button>
-            
-            <hr style="width: 100%; border: 0.5px solid rgba(255,255,255,0.2);">
-            
-            <button class="photo-btn active" onclick="loadScene('foto1', this)">gezeryolu1</button>
-            <button class="photo-btn" onclick="loadScene('foto2', this)">gezeryolu2</button>
-            <button class="photo-btn" onclick="loadScene('foto3', this)">gezeryolu3</button>
-            <button class="photo-btn" onclick="loadScene('foto4', this)">gezeryolu4</button>
-            <button class="photo-btn" onclick="loadScene('foto5', this)">gezeryolu5</button>
-            <button class="photo-btn" onclick="loadScene('foto6', this)">gezeryolu6</button>
+    <div id="main-ui-layer">
+        <button class="side-tool-btn" onclick="toggleCompass()">🧭</button>
+        
+        <button class="side-tool-btn" onclick="viewer.toggleFullscreen()">⛶</button>
+        
+        <div id="menu-container">
+            <button id="menu-trigger" onclick="toggleMenu()">+</button>
+            <div id="controls">
+                <button class="photo-btn active" onclick="loadScene('foto1', this)">gezeryolu1</button>
+                <button class="photo-btn" onclick="loadScene('foto2', this)">gezeryolu2</button>
+                <button class="photo-btn" onclick="loadScene('foto3', this)">gezeryolu3</button>
+                <button class="photo-btn" onclick="loadScene('foto4', this)">gezeryolu4</button>
+                <button class="photo-btn" onclick="loadScene('foto5', this)">gezeryolu5</button>
+                <button class="photo-btn" onclick="loadScene('foto6', this)">gezeryolu6</button>
+            </div>
         </div>
     </div>
 
@@ -99,23 +103,17 @@
     <script>
         function toggleMenu() { document.getElementById('menu-container').classList.toggle('active'); }
 
-        // Pusulayı açıp kapatan özel fonksiyon
         function toggleCompass() {
             const compass = document.querySelector('.pnlm-compass');
-            if (compass.style.display === 'block') {
-                compass.style.display = 'none';
-            } else {
-                compass.style.display = 'block';
-                compass.style.left = '20px';
-                compass.style.bottom = '20px';
-            }
+            compass.style.display = (compass.style.display === 'block') ? 'none' : 'block';
+            compass.style.left = '20px'; compass.style.bottom = '20px';
         }
 
         var commonConfig = {
             "type": "multires",
             "autoLoad": true,
             "hfov": 100,
-            "minHfov": 50,
+            "minHfov": 50, /* Burayı 10 yaparsan daha çok yakınlaşır */
             "maxHfov": 120,
             "mouseZoom": true,
             "showFullscreenCtrl": false,
