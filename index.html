@@ -1,14 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gezeryolu 360 Tur</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+        #panorama { width: 100%; height: 100%; }
+        #controls {
+            position: absolute; bottom: 30px; left: 50%;
+            transform: translateX(-50%); z-index: 100;
+            display: flex; gap: 15px; background: rgba(0,0,0,0.5);
+            padding: 10px 20px; border-radius: 50px; backdrop-filter: blur(5px);
+        }
+        button {
+            background: #fff; border: none; padding: 10px 20px;
+            border-radius: 25px; cursor: pointer; font-weight: bold;
+        }
+        button:hover { background: #00bcd4; color: white; }
+    </style>
+</head>
+<body>
+
+<div id="panorama"></div>
+<div id="controls">
+    <button onclick="loadScene('foto1')">Mekan 1</button>
+    <button onclick="loadScene('foto2')">Mekan 2</button>
+    <button onclick="loadScene('foto3')">Mekan 3</button>
+</div>
+
+<script>
+    const viewer = pannellum.viewer('panorama', {
+        "default": {
+            "firstScene": "foto1",
+            "author": "Gezeryolu",
+            "autoLoad": true,
+            "compass": true,
+            "hfov": 100,
+            "minHfov": 10 // Yüksek kalite zoom
+        },
         "scenes": {
             "foto1": {
-                "type": "equirectangular",
-                "panorama": "gezer360/foto1/pano.jpg" 
+                "type": "cubemap",
+                "cubeMap": [
+                    "gezer360/foto1/1/f0_l.jpg",
+                    "gezer360/foto1/1/r0_l.jpg",
+                    "gezer360/foto1/1/b0_l.jpg",
+                    "gezer360/foto1/1/l0_l.jpg",
+                    "gezer360/foto1/1/u0_l.jpg",
+                    "gezer360/foto1/1/d0_l.jpg"
+                ]
             },
             "foto2": {
-                "type": "equirectangular",
-                "panorama": "gezer360/foto2/pano.jpg"
+                "type": "cubemap",
+                "cubeMap": [
+                    "gezer360/foto2/1/f0_l.jpg",
+                    "gezer360/foto2/1/r0_l.jpg",
+                    "gezer360/foto2/1/b0_l.jpg",
+                    "gezer360/foto2/1/l0_l.jpg",
+                    "gezer360/foto2/1/u0_l.jpg",
+                    "gezer360/foto2/1/d0_l.jpg"
+                ]
             },
             "foto3": {
-                "type": "equirectangular",
-                "panorama": "gezer360/foto3/pano.jpg"
+                "type": "cubemap",
+                "cubeMap": [
+                    "gezer360/foto3/1/f0_l.jpg",
+                    "gezer360/foto3/1/r0_l.jpg",
+                    "gezer360/foto3/1/b0_l.jpg",
+                    "gezer360/foto3/1/l0_l.jpg",
+                    "gezer360/foto3/1/u0_l.jpg",
+                    "gezer360/foto3/1/d0_l.jpg"
+                ]
             }
         }
+    });
+
+    function loadScene(id) {
+        viewer.loadScene(id);
+    }
+</script>
+</body>
+</html>
