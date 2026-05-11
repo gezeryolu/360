@@ -14,30 +14,15 @@
         
         #panorama { width: 100%; height: 100vh; }
         
-        /* ÜST PANEL: BAŞLIK VE TAM EKRAN */
-        #top-panel {
-            position: absolute; top: 15px; right: 15px;
-            z-index: 2000; display: flex; flex-direction: column;
-            align-items: flex-end; gap: 10px;
-        }
-
         #title {
-            color: white; background: rgba(0,0,0,0.7); 
-            padding: 6px 16px; border-radius: 20px; 
-            font-size: 13px; border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px); white-space: nowrap;
+            position: absolute; top: 15px; right: 15px; color: white;
+            background: rgba(0,0,0,0.7); padding: 6px 16px;
+            border-radius: 20px; z-index: 2000; font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
         }
 
-        /* ÖZEL TAM EKRAN BUTONU */
-        #custom-fs-btn {
-            width: 40px; height: 40px; background: rgba(0,0,0,0.7);
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
-            color: white; cursor: pointer; display: flex;
-            align-items: center; justify-content: center;
-            backdrop-filter: blur(5px); font-size: 20px;
-        }
-
-        /* SAĞ ALT KÖŞE MENÜ */
+        /* TÜM KONTROLLERİN TOPLANDIĞI SAĞ ALT MENÜ */
         #menu-container {
             position: absolute; bottom: 25px; right: 25px;
             z-index: 3000; display: flex; flex-direction: column-reverse;
@@ -72,24 +57,34 @@
             text-align: center; min-width: 110px;
         }
 
+        /* TAM EKRAN VE PUSULA İÇİN ÖZEL BUTON STİLİ */
+        .special-btn {
+            background: #28a745; /* Yeşil tonu ile ayırt edilsin */
+            font-weight: bold;
+            border: 1px solid #fff;
+        }
+
         .photo-btn.active { background: #007bff; border-color: #fff; }
 
-        /* KRİTİK: İSTENMEYEN TÜM BUTONLARI VE NAVİGASYONU YOK ET */
-        .pnlm-zoom-controls, .pnlm-fullscreen-ctrl, .pnlm-orientation-button { display: none !important; } 
-        .pnlm-compass { bottom: 20px !important; left: 20px !important; }
+        /* SOL ALTTAKİ NAVİGASYON VE TÜM GEREKSİZLERİ SİL */
+        .pnlm-zoom-controls, .pnlm-fullscreen-ctrl, .pnlm-orientation-button, .pnlm-compass { 
+            display: none !important; 
+        } 
         
     </style>
 </head>
 <body>
 
-    <div id="top-panel">
-        <div id="title">gezeryolu KAMERA</div>
-        <button id="custom-fs-btn" onclick="viewer.toggleFullscreen()">⛶</button>
-    </div>
+    <div id="title">gezeryolu KAMERA</div>
     
     <div id="menu-container">
         <button id="menu-trigger" onclick="toggleMenu()">+</button>
         <div id="controls">
+            <button class="photo-btn special-btn" onclick="viewer.toggleFullscreen()">TAM EKRAN ⛶</button>
+            <button class="photo-btn special-btn" onclick="toggleCompass()">PUSULA 🧭</button>
+            
+            <hr style="width: 100%; border: 0.5px solid rgba(255,255,255,0.2);">
+            
             <button class="photo-btn active" onclick="loadScene('foto1', this)">gezeryolu1</button>
             <button class="photo-btn" onclick="loadScene('foto2', this)">gezeryolu2</button>
             <button class="photo-btn" onclick="loadScene('foto3', this)">gezeryolu3</button>
@@ -104,6 +99,18 @@
     <script>
         function toggleMenu() { document.getElementById('menu-container').classList.toggle('active'); }
 
+        // Pusulayı açıp kapatan özel fonksiyon
+        function toggleCompass() {
+            const compass = document.querySelector('.pnlm-compass');
+            if (compass.style.display === 'block') {
+                compass.style.display = 'none';
+            } else {
+                compass.style.display = 'block';
+                compass.style.left = '20px';
+                compass.style.bottom = '20px';
+            }
+        }
+
         var commonConfig = {
             "type": "multires",
             "autoLoad": true,
@@ -111,7 +118,7 @@
             "minHfov": 50,
             "maxHfov": 120,
             "mouseZoom": true,
-            "showFullscreenCtrl": false, /* Kendi butonumuzu yaptık */
+            "showFullscreenCtrl": false,
             "showZoomCtrl": false,
             "orientationOnByDefault": true,
             "compass": true
