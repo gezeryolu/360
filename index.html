@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gezeryolu Foto 2 Kesin Test</title>
+    <title>Gezeryolu Foto 5 Test</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <style>
@@ -19,17 +19,18 @@
     pannellum.viewer('panorama', {
         "type": "multires",
         "multiRes": {
-            "basePath": "gezer360/foto2/1", // 1 numaralı alt klasöre doğrudan eriştik
-            "path": "/%s1_1",               // f1_1, r1_1 gibi dosyaları bu kurala göre ara
+            "basePath": "foto5", // foto5 klasörünü baz alıyoruz
+            "path": "/%l/%s%y_%x", // Klasör/YönY_X formatı (Örn: 1/f0_0)
             "fallbackPath": "/fallback/%s",
             "extension": "jpg",
             "tileResolution": 512,
-            "maxLevel": 1,
+            "maxLevel": 5, // config.json'daki değerin
             "cubeResolution": 8192
         },
         "autoLoad": true,
         "hfov": 100.0,
-        "compass": true
+        "compass": true,
+        "title": "Gezeryolu Foto 5 - Yüksek Kalite"
     });
 </script>
 
