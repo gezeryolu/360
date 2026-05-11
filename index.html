@@ -12,14 +12,16 @@
         #controls {
             position: absolute; bottom: 30px; left: 50%;
             transform: translateX(-50%); z-index: 100;
-            display: flex; gap: 15px; background: rgba(0,0,0,0.5);
-            padding: 10px 20px; border-radius: 50px; backdrop-filter: blur(5px);
+            display: flex; gap: 15px; background: rgba(0,0,0,0.6);
+            padding: 12px 20px; border-radius: 50px; backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
         button {
-            background: #fff; border: none; padding: 10px 20px;
+            background: #fff; border: none; padding: 10px 22px;
             border-radius: 25px; cursor: pointer; font-weight: bold;
+            transition: 0.3s; color: #222;
         }
-        button:hover { background: #00bcd4; color: white; }
+        button:hover { background: #00bcd4; color: white; transform: scale(1.05); }
     </style>
 </head>
 <body>
@@ -39,40 +41,40 @@
             "autoLoad": true,
             "compass": true,
             "hfov": 100,
-            "minHfov": 10 // Yüksek kalite zoom
+            "minHfov": 10
         },
         "scenes": {
             "foto1": {
                 "type": "cubemap",
                 "cubeMap": [
-                    "gezer360/foto1/1/f0_l.jpg",
-                    "gezer360/foto1/1/r0_l.jpg",
-                    "gezer360/foto1/1/b0_l.jpg",
-                    "gezer360/foto1/1/l0_l.jpg",
-                    "gezer360/foto1/1/u0_l.jpg",
-                    "gezer360/foto1/1/d0_l.jpg"
+                    "gezer360/foto1/f1_1.jpg",
+                    "gezer360/foto1/r1_1.jpg",
+                    "gezer360/foto1/b1_1.jpg",
+                    "gezer360/foto1/l1_1.jpg",
+                    "gezer360/foto1/u1_1.jpg",
+                    "gezer360/foto1/d1_1.jpg"
                 ]
             },
             "foto2": {
                 "type": "cubemap",
                 "cubeMap": [
-                    "gezer360/foto2/1/f0_l.jpg",
-                    "gezer360/foto2/1/r0_l.jpg",
-                    "gezer360/foto2/1/b0_l.jpg",
-                    "gezer360/foto2/1/l0_l.jpg",
-                    "gezer360/foto2/1/u0_l.jpg",
-                    "gezer360/foto2/1/d0_l.jpg"
+                    "gezer360/foto2/f1_1.jpg",
+                    "gezer360/foto2/r1_1.jpg",
+                    "gezer360/foto2/b1_1.jpg",
+                    "gezer360/foto2/l1_1.jpg",
+                    "gezer360/foto2/u1_1.jpg",
+                    "gezer360/foto2/d1_1.jpg"
                 ]
             },
             "foto3": {
                 "type": "cubemap",
                 "cubeMap": [
-                    "gezer360/foto3/1/f0_l.jpg",
-                    "gezer360/foto3/1/r0_l.jpg",
-                    "gezer360/foto3/1/b0_l.jpg",
-                    "gezer360/foto3/1/l0_l.jpg",
-                    "gezer360/foto3/1/u0_l.jpg",
-                    "gezer360/foto3/1/d0_l.jpg"
+                    "gezer360/foto3/f1_1.jpg",
+                    "gezer360/foto3/r1_1.jpg",
+                    "gezer360/foto3/b1_1.jpg",
+                    "gezer360/foto3/l1_1.jpg",
+                    "gezer360/foto3/u1_1.jpg",
+                    "gezer360/foto3/d1_1.jpg"
                 ]
             }
         }
