@@ -31,12 +31,12 @@
             flex-direction: row-reverse; 
             align-items: flex-end;
             gap: 10px;
-            z-index: 10000; /* Tam ekranda kesin görünmesi için en yüksek değer */
-            pointer-events: none; /* Arka planı tıklanabilir bırakır */
+            z-index: 10000;
+            pointer-events: none;
         }
 
         #menu-container, .pnlm-controls-container {
-            pointer-events: auto; /* Sadece butonlar tıklanabilir olsun */
+            pointer-events: auto;
         }
 
         #menu-container {
@@ -83,7 +83,6 @@
 
         .photo-btn.active { background: #007bff; border-color: #fff; font-weight: bold; }
 
-        /* Pannellum butonlarının orijinal yerlerinden koparılması için */
         .pnlm-controls-container {
             position: static !important;
             display: flex !important;
@@ -103,21 +102,23 @@
 
     <div id="title">gezeryolu KAMERA</div>
     
-    <div id="bottom-controls">
-        <div id="menu-container">
-            <button id="menu-trigger" onclick="toggleMenu()">+</button>
-            <div id="controls">
-                <button class="photo-btn active" onclick="loadScene('foto1', this)">gezeryolu1</button>
-                <button class="photo-btn" onclick="loadScene('foto2', this)">gezeryolu2</button>
-                <button class="photo-btn" onclick="loadScene('foto3', this)">gezeryolu3</button>
-                <button class="photo-btn" onclick="loadScene('foto4', this)">gezeryolu4</button>
-                <button class="photo-btn" onclick="loadScene('foto5', this)">gezeryolu5</button>
-                <button class="photo-btn" onclick="loadScene('foto6', this)">gezeryolu6</button>
+    <!-- Ana panorama div'i -->
+    <div id="panorama">
+        <!-- Kritik Düzenleme: Menüyü panorama div'inin içine aldık, böylece tam ekranda kaybolmayacak -->
+        <div id="bottom-controls">
+            <div id="menu-container">
+                <button id="menu-trigger" onclick="toggleMenu()">+</button>
+                <div id="controls">
+                    <button class="photo-btn active" onclick="loadScene('foto1', this)">gezeryolu1</button>
+                    <button class="photo-btn" onclick="loadScene('foto2', this)">gezeryolu2</button>
+                    <button class="photo-btn" onclick="loadScene('foto3', this)">gezeryolu3</button>
+                    <button class="photo-btn" onclick="loadScene('foto4', this)">gezeryolu4</button>
+                    <button class="photo-btn" onclick="loadScene('foto5', this)">gezeryolu5</button>
+                    <button class="photo-btn" onclick="loadScene('foto6', this)">gezeryolu6</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <div id="panorama"></div>
 
     <script>
         function toggleMenu() {
@@ -152,25 +153,21 @@
             }
         });
 
-        // Butonları sürekli kontrol edip aşağıya çeken mekanizma
         function moveControls() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
             var customControls = document.getElementById('bottom-controls');
+            // Butonları yine sizin özel div'inizin içine, ama bu sefer panorama div'inin içinde kalacak şekilde taşıyoruz.
             if (pnlmControls && customControls.lastChild !== pnlmControls) {
                 customControls.appendChild(pnlmControls);
             }
         }
 
-        // 1. Sayfa yüklendiğinde ve her sahne değişiminde çalıştır
         viewer.on('load', moveControls);
-
-        // 2. Tam ekran değişimlerinde çalıştır
         document.addEventListener('fullscreenchange', moveControls);
         document.addEventListener('webkitfullscreenchange', moveControls);
 
-        // 3. Pannellum'un butonları geri kaçırmasını engellemek için anlık izleyici
         const observer = new MutationObserver(moveControls);
-        observer.observe(document.body, { childList: true, subtree: true });
+        observer.observe(document.getElementById('panorama'), { childList: true, subtree: true });
 
         function loadScene(id, btnElement) {
             viewer.loadScene(id);
