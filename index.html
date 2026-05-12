@@ -89,7 +89,7 @@
 
         .photo-btn.active { background: #007bff; border-color: #fff; font-weight: bold; }
 
-        /* PANNELLUM KONTROLLERİ - ŞEKLİ BOZULMADI */
+        /* PANNELLUM KONTROLLERİ */
         .pnlm-controls-container {
             position: static !important; 
             display: flex !important;
@@ -148,10 +148,7 @@
             "default": {
                 "firstScene": "foto1",
                 "sceneFadeDuration": 1200,
-                "title": "gezeryolu",
-                "author": "İlyas Gezer",
-                "aboutMsg": "gezeryolu.",
-                "aboutURL": "https://gezeryolu.blogspot.com"
+                "showAbout": false
             },
             "scenes": {
                 "foto1": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto1", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
@@ -173,10 +170,8 @@
             }
         }
 
-        // 1. Sahne yüklenince çalıştır
         viewer.on('load', moveControls);
         
-        // 2. İlk açılışta butonlar oluşur oluşmaz yakalamak için kısa aralıklı kontrol
         var checkExist = setInterval(function() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
             if (pnlmControls) {
