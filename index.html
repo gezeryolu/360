@@ -17,7 +17,7 @@
         #title {
             position: absolute; top: 15px; right: 15px; color: white;
             background: rgba(0,0,0,0.7); padding: 6px 16px;
-            border-radius: 20px; z-index: 2000; font-size: 13px;
+            border-radius: 20px; z-index: 5000; font-size: 13px;
             border: 1px solid rgba(255,255,255,0.2);
             backdrop-filter: blur(5px);
         }
@@ -28,10 +28,10 @@
             bottom: 20px;
             right: 20px;
             display: flex;
-            flex-direction: row-reverse; /* Sağdan sola dizilim: Mavi -> Jiroskop -> Tam Ekran */
-            align-items: center;
-            gap: 15px;
-            z-index: 4000;
+            flex-direction: row-reverse; /* Sağdan sola: Mavi Buton -> Jiroskop -> Tam Ekran */
+            align-items: flex-end;
+            gap: 10px;
+            z-index: 6000; /* Tam ekranda görünür kalması için yüksek değer */
         }
 
         #menu-container {
@@ -78,26 +78,21 @@
 
         .photo-btn.active { background: #007bff; border-color: #fff; font-weight: bold; }
 
-        /* Pannellum'un kendi butonlarını (Jiroskop ve Tam Ekran) özelleştirme */
+        /* Pannellum butonlarını eski/orijinal boyutuna döndüren ayarlar */
         .pnlm-controls-container {
-            position: static !important; /* Grup içinde serbest kalsın */
+            position: static !important;
             display: flex !important;
             flex-direction: row-reverse !important;
-            gap: 15px !important;
+            gap: 5px !important; /* Butonlar arası minik boşluk */
             background: none !important;
+            margin: 0 !important;
+            padding-bottom: 12px !important; /* Mavi butona hizalamak için hafif yukarı kaldırdık */
         }
 
-        .pnlm-zoom-controls { display: none !important; } /* Zaten kapatmıştık */
-        
+        /* Butonların iç yapısına (ikonlara) dokunmuyoruz, orijinal kalsın */
         .pnlm-fullscreen-toggle-button, .pnlm-orientation-button {
             position: static !important;
-            width: 44px !important;
-            height: 44px !important;
-            background-color: rgba(0,0,0,0.6) !important;
-            border-radius: 50% !important;
-            border: 1px solid rgba(255,255,255,0.2) !important;
-            backdrop-filter: blur(5px);
-            cursor: pointer;
+            z-index: 6001 !important; /* Her zaman en üstte kalsınlar */
         }
     </style>
 </head>
@@ -135,7 +130,7 @@
             "mouseZoom": true,
             "showFullscreenCtrl": true,
             "showZoomCtrl": false,
-            "orientationOnByDefault": false, // Sayfa açılır açılmaz titrememesi için false, kullanıcı butona basınca açılır
+            "orientationOnByDefault": false,
             "compass": false
         };
 
@@ -154,7 +149,7 @@
             }
         });
 
-        // Pannellum butonlarını bizim oluşturduğumuz kontrol kutusuna (bottom-controls) taşıma işlemi (Google Pro Dokunuşu)
+        // Butonları sağ alt gruba taşıyan fonksiyon
         viewer.on('load', function() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
             var customControls = document.getElementById('bottom-controls');
