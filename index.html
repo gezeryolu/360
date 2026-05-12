@@ -24,13 +24,13 @@
 
         /* SAĞ ALT KONTROL GRUBU */
         #bottom-controls {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: row-reverse; 
-            align-items: flex-end;
-            gap: 10px;
+            position: absolute !important; /* Pannellum'un ezmesini önlemek için */
+            bottom: 20px !important;
+            right: 20px !important;
+            display: flex !important;
+            flex-direction: row-reverse !important; 
+            align-items: flex-end !important;
+            gap: 10px !important;
             z-index: 10000;
             pointer-events: none;
         }
@@ -102,9 +102,7 @@
 
     <div id="title">gezeryolu KAMERA</div>
     
-    <!-- Ana panorama div'i -->
     <div id="panorama">
-        <!-- Kritik Düzenleme: Menüyü panorama div'inin içine aldık, böylece tam ekranda kaybolmayacak -->
         <div id="bottom-controls">
             <div id="menu-container">
                 <button id="menu-trigger" onclick="toggleMenu()">+</button>
@@ -156,8 +154,7 @@
         function moveControls() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
             var customControls = document.getElementById('bottom-controls');
-            // Butonları yine sizin özel div'inizin içine, ama bu sefer panorama div'inin içinde kalacak şekilde taşıyoruz.
-            if (pnlmControls && customControls.lastChild !== pnlmControls) {
+            if (pnlmControls && customControls && customControls.lastChild !== pnlmControls) {
                 customControls.appendChild(pnlmControls);
             }
         }
