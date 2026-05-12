@@ -28,6 +28,13 @@
             backdrop-filter: blur(5px);
         }
 
+        /* BÖLGE İSMİ İÇİN KÜÇÜK YAZI ALANI */
+        #scene-name-display {
+            position: absolute; bottom: 10px; left: 10px; color: rgba(255,255,255,0.5);
+            font-size: 10px; z-index: 9999; pointer-events: none;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
         /* SAĞ ALT KONTROL GRUBU */
         #bottom-controls {
             position: absolute !important;
@@ -109,11 +116,12 @@
 <body>
 
     <div id="title">gezeryolu KAMERA</div>
+    <div id="scene-name-display">Kiya</div>
     
     <div id="panorama">
         <div id="bottom-controls">
             <div id="menu-container">
-                <button id="menu-trigger" onclick="toggleMenu()">+</button>
+                <button id="menu-trigger" onclick="toggleMenu(event)">+</button>
                 <div id="controls">
                     <button class="photo-btn active" onclick="loadScene('foto1', this)">Kiya</button>
                     <button class="photo-btn" onclick="loadScene('foto2', this)">Gırkı Hındırışı</button>
@@ -127,9 +135,15 @@
     </div>
 
     <script>
-        function toggleMenu() {
+        function toggleMenu(event) {
+            if(event) event.stopPropagation();
             document.getElementById('menu-container').classList.toggle('active');
         }
+
+        // Boş bir yere dokununca menüyü kapatma
+        document.getElementById('panorama').addEventListener('mousedown', function() {
+            document.getElementById('menu-container').classList.remove('active');
+        });
 
         var commonConfig = {
             "type": "multires",
@@ -169,10 +183,8 @@
             }
         }
 
-        // 1. Sahne yüklenince çalıştır
         viewer.on('load', moveControls);
         
-        // 2. İlk açılışta butonlar oluşur oluşmaz yakalamak için kısa aralıklı kontrol
         var checkExist = setInterval(function() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
             if (pnlmControls) {
@@ -191,6 +203,10 @@
             viewer.loadScene(id);
             document.querySelectorAll('.photo-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
+            // Fotoğraf seçince menüyü kapat
+            document.getElementById('menu-container').classList.remove('active');
+            // Alt köşedeki bölge ismini güncelle
+            document.getElementById('scene-name-display').innerText = btnElement.innerText;
         }
     </script>
 </body>
