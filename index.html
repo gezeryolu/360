@@ -89,7 +89,7 @@
 
         .photo-btn.active { background: #007bff; border-color: #fff; font-weight: bold; }
 
-        /* PANNELLUM KONTROLLERİ */
+        /* PANNELLUM KONTROLLERİ - ŞEKLİ BOZULMADI */
         .pnlm-controls-container {
             position: static !important; 
             display: flex !important;
@@ -117,9 +117,9 @@
                 <div id="controls">
                     <button class="photo-btn active" onclick="loadScene('foto1', this)">Kiya</button>
                     <button class="photo-btn" onclick="loadScene('foto2', this)">Gırkı Hındırışı</button>
-                    <button class="photo-btn" onclick="loadScene('foto3', this)">Bişi Hırçı</button>
+                    <button class="photo-btn" onclick="loadScene('foto3', this)">Bişı Hırçı</button>
                     <button class="photo-btn" onclick="loadScene('foto4', this)">Seru Banyı</button>
-                    <button class="photo-btn" onclick="loadScene('foto5', this)">Hevıza Bişi Hırçı</button>
+                    <button class="photo-btn" onclick="loadScene('foto5', this)">Hevıza Bişı Hırçı</button>
                     <button class="photo-btn" onclick="loadScene('foto6', this)">Bın BerıSpi</button>
                 </div>
             </div>
@@ -131,11 +131,9 @@
             document.getElementById('menu-container').classList.toggle('active');
         }
 
-                var commonConfig = {
+        var commonConfig = {
             "type": "multires",
             "autoLoad": true,
-            "title": "gezeryolu.blogspot.com",
-            "author": "İlyas Gezer",
             "hfov": 100,
             "minHfov": 3,
             "maxHfov": 120,
@@ -143,15 +141,13 @@
             "showFullscreenCtrl": true,
             "showZoomCtrl": false,
             "orientationOnByDefault": false,
-            "compass": false,
-            "hotSpotDebug": false
+            "compass": false
         };
-        
+
         var viewer = pannellum.viewer('panorama', {
             "default": {
                 "firstScene": "foto1",
-                "sceneFadeDuration": 1200,
-                "showAbout": false
+                "sceneFadeDuration": 1200
             },
             "scenes": {
                 "foto1": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto1", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
@@ -173,8 +169,10 @@
             }
         }
 
+        // 1. Sahne yüklenince çalıştır
         viewer.on('load', moveControls);
         
+        // 2. İlk açılışta butonlar oluşur oluşmaz yakalamak için kısa aralıklı kontrol
         var checkExist = setInterval(function() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
             if (pnlmControls) {
