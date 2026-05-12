@@ -17,7 +17,7 @@
         #title {
             position: absolute; top: 15px; right: 15px; color: white;
             background: rgba(0,0,0,0.7); padding: 6px 16px;
-            border-radius: 20px; z-index: 5000; font-size: 13px;
+            border-radius: 20px; z-index: 9999; font-size: 13px;
             border: 1px solid rgba(255,255,255,0.2);
             backdrop-filter: blur(5px);
         }
@@ -28,10 +28,15 @@
             bottom: 20px;
             right: 20px;
             display: flex;
-            flex-direction: row-reverse; /* Sağdan sola: Mavi Buton -> Jiroskop -> Tam Ekran */
+            flex-direction: row-reverse; 
             align-items: flex-end;
             gap: 10px;
-            z-index: 6000; /* Tam ekranda görünür kalması için yüksek değer */
+            z-index: 10000; /* Tam ekranda kesin görünmesi için en yüksek değer */
+            pointer-events: none; /* Arka planı tıklanabilir bırakır */
+        }
+
+        #menu-container, .pnlm-controls-container {
+            pointer-events: auto; /* Sadece butonlar tıklanabilir olsun */
         }
 
         #menu-container {
@@ -78,21 +83,19 @@
 
         .photo-btn.active { background: #007bff; border-color: #fff; font-weight: bold; }
 
-        /* Pannellum butonlarını eski/orijinal boyutuna döndüren ayarlar */
+        /* Pannellum butonlarının orijinal yerlerinden koparılması için */
         .pnlm-controls-container {
             position: static !important;
             display: flex !important;
             flex-direction: row-reverse !important;
-            gap: 5px !important; /* Butonlar arası minik boşluk */
+            gap: 5px !important;
             background: none !important;
             margin: 0 !important;
-            padding-bottom: 12px !important; /* Mavi butona hizalamak için hafif yukarı kaldırdık */
+            padding-bottom: 5px !important;
         }
 
-        /* Butonların iç yapısına (ikonlara) dokunmuyoruz, orijinal kalsın */
         .pnlm-fullscreen-toggle-button, .pnlm-orientation-button {
             position: static !important;
-            z-index: 6001 !important; /* Her zaman en üstte kalsınlar */
         }
     </style>
 </head>
@@ -112,7 +115,7 @@
                 <button class="photo-btn" onclick="loadScene('foto6', this)">gezeryolu6</button>
             </div>
         </div>
-        </div>
+    </div>
 
     <div id="panorama"></div>
 
@@ -149,14 +152,25 @@
             }
         });
 
-        // Butonları sağ alt gruba taşıyan fonksiyon
-        viewer.on('load', function() {
+        // Butonları sürekli kontrol edip aşağıya çeken mekanizma
+        function moveControls() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
             var customControls = document.getElementById('bottom-controls');
-            if (pnlmControls) {
+            if (pnlmControls && customControls.lastChild !== pnlmControls) {
                 customControls.appendChild(pnlmControls);
             }
-        });
+        }
+
+        // 1. Sayfa yüklendiğinde ve her sahne değişiminde çalıştır
+        viewer.on('load', moveControls);
+
+        // 2. Tam ekran değişimlerinde çalıştır
+        document.addEventListener('fullscreenchange', moveControls);
+        document.addEventListener('webkitfullscreenchange', moveControls);
+
+        // 3. Pannellum'un butonları geri kaçırmasını engellemek için anlık izleyici
+        const observer = new MutationObserver(moveControls);
+        observer.observe(document.body, { childList: true, subtree: true });
 
         function loadScene(id, btnElement) {
             viewer.loadScene(id);
