@@ -131,9 +131,11 @@
             document.getElementById('menu-container').classList.toggle('active');
         }
 
-        var commonConfig = {
+                var commonConfig = {
             "type": "multires",
             "autoLoad": true,
+            "title": "gezeryolu.blogspot.com",
+            "author": "İlyas Gezer",
             "hfov": 100,
             "minHfov": 3,
             "maxHfov": 120,
@@ -141,9 +143,10 @@
             "showFullscreenCtrl": true,
             "showZoomCtrl": false,
             "orientationOnByDefault": false,
-            "compass": false
+            "compass": false,
+            "hotSpotDebug": false
         };
-
+        
         var viewer = pannellum.viewer('panorama', {
             "default": {
                 "firstScene": "foto1",
