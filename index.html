@@ -12,7 +12,7 @@
             overflow: hidden; background: #000; position: fixed; 
         }
         
-        #panorama { width: 100%; height: 100vh; }
+        #panorama { width: 100%; height: 100vh; position: relative; }
         
         #title {
             position: absolute; top: 15px; right: 15px; color: white;
@@ -22,16 +22,16 @@
             backdrop-filter: blur(5px);
         }
 
-        /* SAĞ ALT KONTROL GRUBU */
+        /* SAĞ ALT KONTROL GRUBU - KESİN KONUMLANDIRMA */
         #bottom-controls {
-            position: absolute !important; /* Pannellum'un ezmesini önlemek için */
-            bottom: 20px !important;
+            position: absolute !important;
+            bottom: 25px !important; /* Biraz daha yukarı aldım ki tarayıcı çubuğuna çarpmasın */
             right: 20px !important;
             display: flex !important;
             flex-direction: row-reverse !important; 
             align-items: flex-end !important;
-            gap: 10px !important;
-            z-index: 10000;
+            gap: 12px !important;
+            z-index: 10000 !important;
             pointer-events: none;
         }
 
@@ -83,18 +83,22 @@
 
         .photo-btn.active { background: #007bff; border-color: #fff; font-weight: bold; }
 
+        /* PANNELLUM BUTONLARINI SAĞ ÜSTTEN SÖKÜP ALMAK İÇİN SIFIRLAMA */
         .pnlm-controls-container {
-            position: static !important;
+            position: static !important; /* Köşe bağımlılığını koparır */
             display: flex !important;
             flex-direction: row-reverse !important;
-            gap: 5px !important;
+            gap: 8px !important;
             background: none !important;
             margin: 0 !important;
-            padding-bottom: 5px !important;
+            padding: 0 !important;
+            top: auto !important;
+            right: auto !important;
         }
 
         .pnlm-fullscreen-toggle-button, .pnlm-orientation-button {
             position: static !important;
+            margin: 0 !important;
         }
     </style>
 </head>
@@ -115,6 +119,7 @@
                     <button class="photo-btn" onclick="loadScene('foto6', this)">gezeryolu6</button>
                 </div>
             </div>
+            <!-- Pannellum butonları buraya JS ile otomatik eklenecek -->
         </div>
     </div>
 
@@ -154,8 +159,11 @@
         function moveControls() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
             var customControls = document.getElementById('bottom-controls');
-            if (pnlmControls && customControls && customControls.lastChild !== pnlmControls) {
-                customControls.appendChild(pnlmControls);
+            if (pnlmControls && customControls) {
+                // Sadece konteyner içinde değilse taşıma yap
+                if (pnlmControls.parentElement !== customControls) {
+                    customControls.appendChild(pnlmControls);
+                }
             }
         }
 
@@ -163,6 +171,7 @@
         document.addEventListener('fullscreenchange', moveControls);
         document.addEventListener('webkitfullscreenchange', moveControls);
 
+        // Daha agresif bir izleyici (Butonlar kaçmaya çalışırsa geri yakalar)
         const observer = new MutationObserver(moveControls);
         observer.observe(document.getElementById('panorama'), { childList: true, subtree: true });
 
