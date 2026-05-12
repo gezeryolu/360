@@ -9,7 +9,7 @@
     <style>
         body, html { 
             margin: 0; padding: 0; 
-            height: 100dvh; /* Dinamik yükseklik: Tarayıcı çubuğuna göre kendini ayarlar */
+            height: 100dvh; 
             width: 100%;
             overflow: hidden; background: #000; position: fixed; 
         }
@@ -31,12 +31,11 @@
         /* SAĞ ALT KONTROL GRUBU */
         #bottom-controls {
             position: absolute !important;
-            /* Butonların alt çubuğa gömülmemesi için güvenli alan boşluğu */
             bottom: calc(20px + env(safe-area-inset-bottom)) !important; 
             right: 20px !important;
             display: flex !important;
             flex-direction: row-reverse !important; 
-            align-items: center !important; /* Butonları aynı hizada tutar */
+            align-items: center !important;
             gap: 12px !important;
             z-index: 10000 !important;
             pointer-events: none;
@@ -90,7 +89,7 @@
 
         .photo-btn.active { background: #007bff; border-color: #fff; font-weight: bold; }
 
-        /* PANNELLUM BUTONLARI KONUMLANDIRMASI - ESKİ RENK VE BOYUTLAR GERİ GELDİ */
+        /* PANNELLUM KONTROLLERİ - ŞEKLİ BOZULMADI */
         .pnlm-controls-container {
             position: static !important; 
             display: flex !important;
@@ -104,7 +103,6 @@
         .pnlm-fullscreen-toggle-button, .pnlm-orientation-button {
             position: static !important;
             margin: 0 !important;
-            /* Önceki siyahlaştırma ve büyütme kodları kaldırıldı, Pannellum'un varsayılan stilleri kullanılacak */
         }
     </style>
 </head>
@@ -171,8 +169,18 @@
             }
         }
 
+        // 1. Sahne yüklenince çalıştır
         viewer.on('load', moveControls);
-        // Ekran boyutu değiştiğinde (klavye açılması veya bar gizlenmesi) kontrolleri tazele
+        
+        // 2. İlk açılışta butonlar oluşur oluşmaz yakalamak için kısa aralıklı kontrol
+        var checkExist = setInterval(function() {
+            var pnlmControls = document.querySelector('.pnlm-controls-container');
+            if (pnlmControls) {
+                moveControls();
+                clearInterval(checkExist);
+            }
+        }, 100); 
+
         window.addEventListener('resize', moveControls);
         document.addEventListener('fullscreenchange', moveControls);
 
@@ -183,7 +191,6 @@
             viewer.loadScene(id);
             document.querySelectorAll('.photo-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
-            // Menü seçimden sonra kapansın istersen buraya toggleMenu() ekleyebiliriz.
         }
     </script>
 </body>
