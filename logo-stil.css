@@ -1,0 +1,11 @@
+.gezeryolu-360-logo {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 55px; /* Küçük boy boyutu */
+    height: auto;
+    opacity: 0.25; /* %25 hafif şeffaflık */
+    z-index: 9999;
+    pointer-events: none;
+}
+
