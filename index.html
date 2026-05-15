@@ -2,72 +2,179 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>gezeryolu GALERİ</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; }
-        #panorama { width: 100%; height: 100vh; background: #1a1a1a; }
+        body, html { 
+            margin: 0; padding: 0; 
+            height: 100dvh; 
+            width: 100%;
+            overflow: hidden; background: #000; position: fixed; 
+        }
         
-        /* BAŞLIK - KESİN OLARAK SAĞ ÜSTTE */
+        #panorama { 
+            width: 100%; 
+            height: 100dvh; 
+            position: relative; 
+        }
+        
+        /* BAŞLIK: ŞEFFAF VE RENK DEĞİŞTİREN */
         #title {
-            position: absolute; top: 15px; right: 15px; color: white;
-            background: rgba(0,0,0,0.7); padding: 8px 20px;
-            border-radius: 8px; z-index: 1000; font-weight: bold;
-            border: 1px solid rgba(255,255,255,0.2);
+            position: absolute; top: 15px; right: 15px;
+            padding: 6px 16px; z-index: 9999; font-size: 13px;
+            background: transparent;
+            border: none;
+            backdrop-filter: none;
+            font-weight: bold;
+            animation: colorChange 3s infinite alternate;
         }
 
-        /* GALERİ SEÇİM MENÜSÜ - SOL ALTTA */
+        @keyframes colorChange {
+            0% { color: #ffffff; }
+            100% { color: #000000; }
+        }
+
+        /* SOL ALT KÜÇÜK BÖLGE İSMİ */
+        #scene-name-display {
+            position: absolute; bottom: 10px; left: 10px; color: rgba(255,255,255,0.5);
+            font-size: 10px; z-index: 9999; pointer-events: none;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* SAĞ ALT KONTROL GRUBU */
+        #bottom-controls {
+            position: absolute !important;
+            bottom: calc(20px + env(safe-area-inset-bottom)) !important; 
+            right: 20px !important;
+            display: flex !important;
+            flex-direction: row-reverse !important; 
+            align-items: center !important;
+            gap: 12px !important;
+            z-index: 10000 !important;
+            pointer-events: none;
+        }
+
+        #menu-container, .pnlm-controls-container {
+            pointer-events: auto;
+        }
+
+        #menu-container {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #menu-trigger {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: #007bff; color: white; border: 2px solid rgba(255,255,255,0.3);
+            cursor: pointer; font-size: 24px; font-weight: bold; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
         #controls {
-            position: absolute; bottom: 20px; left: 20px;
-            z-index: 1000; display: flex; flex-wrap: wrap; gap: 8px;
-            max-width: 300px;
+            display: flex; flex-direction: column; 
+            gap: 8px; opacity: 0; visibility: hidden;
+            transform: translateY(20px); 
+            transition: all 0.4s ease;
+            background: rgba(0,0,0,0.6); padding: 10px; border-radius: 15px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+            position: absolute;
+            bottom: 65px;
+        }
+
+        #menu-container.active #controls {
+            opacity: 1; visibility: visible; transform: translateY(0);
+        }
+        #menu-container.active #menu-trigger {
+            transform: rotate(45deg); background: #ff4757;
         }
 
         .photo-btn {
-            background: rgba(0, 0, 0, 0.6); color: white; border: 1px solid white;
-            padding: 8px 12px; cursor: pointer; border-radius: 5px; font-size: 13px;
-            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.1); color: white; 
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 18px; cursor: pointer; border-radius: 12px; 
+            font-size: 14px; transition: 0.3s; white-space: nowrap;
+            text-align: center; min-width: 100px;
         }
 
-        .photo-btn:hover { background: white; color: black; }
-        .photo-btn.active { background: #007bff; border-color: #007bff; }
+        .photo-btn.active { background: #007bff; border-color: #fff; font-weight: bold; }
+
+        /* PANNELLUM KONTROLLERİ */
+        .pnlm-controls-container {
+            position: static !important; 
+            display: flex !important;
+            flex-direction: row-reverse !important;
+            gap: 8px !important;
+            background: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .pnlm-fullscreen-toggle-button, .pnlm-orientation-button {
+            position: static !important;
+            margin: 0 !important;
+        }
     </style>
 </head>
 <body>
 
     <div id="title">gezeryolu KAMERA</div>
+    <div id="scene-name-display">Kiya</div>
     
-    <div id="controls">
-        <button class="photo-btn" onclick="loadScene('foto1')">Foto 1</button>
-        <button class="photo-btn" onclick="loadScene('foto2')">Foto 2</button>
-        <button class="photo-btn" onclick="loadScene('foto3')">Foto 3</button>
-        <button class="photo-btn" onclick="loadScene('foto4')">Foto 4</button>
-        <button class="photo-btn active" onclick="loadScene('foto5')">Foto 5</button>
-        <button class="photo-btn" onclick="loadScene('foto6')">Foto 6</button>
+    <div id="panorama">
+        <div id="bottom-controls">
+            <div id="menu-container">
+                <button id="menu-trigger" onclick="toggleMenu(event)">+</button>
+                <div id="controls">
+                    <button class="photo-btn active" onclick="loadScene('foto1', this)">Kiya</button>
+                    <button class="photo-btn" onclick="loadScene('foto2', this)">Gırkı Hındırışı</button>
+                    <button class="photo-btn" onclick="loadScene('foto3', this)">Bişı Hırçı</button>
+                    <button class="photo-btn" onclick="loadScene('foto4', this)">Seru Banyı</button>
+                    <button class="photo-btn" onclick="loadScene('foto5', this)">Hevıza Bişı Hırçı</button>
+                    <button class="photo-btn" onclick="loadScene('foto6', this)">Bın BerıSpi</button>
+                    <button class="photo-btn" onclick="loadScene('foto7', this)">foto7</button>
+                    <button class="photo-btn" onclick="loadScene('foto8', this)">foto8</button>
+                    <button class="photo-btn" onclick="loadScene('foto9', this)">foto9</button>
+                    <button class="photo-btn" onclick="loadScene('foto10', this)">foto10</button>
+                    <button class="photo-btn" onclick="loadScene('foto11', this)">foto11</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="panorama"></div>
-
     <script>
-        // Görünüm Ayarları (Tüm fotoğraflar için ortak)
+        function toggleMenu(event) {
+            if(event) event.stopPropagation();
+            document.getElementById('menu-container').classList.toggle('active');
+        }
+
+        document.getElementById('panorama').addEventListener('mousedown', function() {
+            document.getElementById('menu-container').classList.remove('active');
+        });
+
         var commonConfig = {
             "type": "multires",
             "autoLoad": true,
             "hfov": 100,
-            "minHfov": 5,
+            "minHfov": 3,
             "maxHfov": 120,
             "mouseZoom": true,
             "showFullscreenCtrl": true,
-            "showZoomCtrl": true,
-            "orientationOnByDefault": true
+            "showZoomCtrl": false,
+            "orientationOnByDefault": true,
+            "showOrientationCtrl": true,
+            "compass": false
         };
 
         var viewer = pannellum.viewer('panorama', {
             "default": {
-                "firstScene": "foto5", // Başlangıçta foto5 açılır
-                "sceneFadeDuration": 1000
+                "firstScene": "foto1",
+                "sceneFadeDuration": 1200
             },
             "scenes": {
                 "foto1": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto1", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
@@ -75,17 +182,48 @@
                 "foto3": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto3", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
                 "foto4": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto4", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
                 "foto5": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto5", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
-                "foto6": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto6", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig)
+                "foto6": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto6", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
+                "foto7": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto7", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
+                "foto8": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto8", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
+                "foto9": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto9", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
+                "foto10": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto10", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig),
+                "foto11": Object.assign({ "multiRes": { "basePath": "https://gezeryolu.github.io/360/foto11", "path": "/%l/%s%y_%x", "fallbackPath": "/fallback/%s", "extension": "jpg", "tileResolution": 512, "maxLevel": 5, "cubeResolution": 8192 } }, commonConfig)
             }
         });
 
-        function loadScene(id) {
+        function moveControls() {
+            var pnlmControls = document.querySelector('.pnlm-controls-container');
+            var customControls = document.getElementById('bottom-controls');
+            if (pnlmControls && customControls) {
+                if (pnlmControls.parentElement !== customControls) {
+                    customControls.appendChild(pnlmControls);
+                }
+            }
+        }
+
+        viewer.on('load', moveControls);
+        
+        var checkExist = setInterval(function() {
+            var pnlmControls = document.querySelector('.pnlm-controls-container');
+            if (pnlmControls) {
+                moveControls();
+                clearInterval(checkExist);
+            }
+        }, 100); 
+
+        window.addEventListener('resize', moveControls);
+        document.addEventListener('fullscreenchange', moveControls);
+
+        const observer = new MutationObserver(moveControls);
+        observer.observe(document.getElementById('panorama'), { childList: true, subtree: true });
+
+        function loadScene(id, btnElement) {
             viewer.loadScene(id);
-            // Buton aktiflik durumunu güncelle
             document.querySelectorAll('.photo-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            btnElement.classList.add('active');
+            document.getElementById('menu-container').classList.remove('active');
+            document.getElementById('scene-name-display').innerText = btnElement.innerText;
         }
     </script>
-
 </body>
 </html>
