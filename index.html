@@ -10,14 +10,14 @@
     <style>
         body, html { 
             margin: 0; padding: 0; 
-            height: 100dvh; 
+            height: 100%; 
             width: 100%;
             overflow: hidden; background: #000; position: fixed; 
         }
         
         #panorama { 
             width: 100%; 
-            height: 100dvh; 
+            height: 100%; 
             position: relative; 
         }
         
@@ -120,6 +120,14 @@
             position: static !important;
             margin: 0 !important;
         }
+
+        /* YATAY EKRAN MODU İÇİN ÖZEL DESTEK KURALI */
+        @media screen and (orientation: landscape) {
+            body, html, #panorama {
+                height: 100% !important;
+                width: 100% !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -151,14 +159,23 @@
     </div>
 
     <script>
+        // MENÜ AÇMA VE KAPATMA FONKSİYONU (Hem açar hem kapatır)
         function toggleMenu(event) {
             if(event) event.stopPropagation();
             document.getElementById('menu-container').classList.toggle('active');
         }
 
-        document.getElementById('panorama').addEventListener('mousedown', function() {
-            document.getElementById('menu-container').classList.remove('active');
-        });
+        // EKRANIN BOŞ BİR YERİNE DOKUNULDUĞUNDA MENÜYÜ KAPATMA FONKSİYONU
+        function closeMenuIfOpen() {
+            var menu = document.getElementById('menu-container');
+            if (menu && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            }
+        }
+
+        // Hem mousedown (fare) hem de touchstart (mobil parmak) tetikleyicileri eklendi
+        document.getElementById('panorama').addEventListener('mousedown', closeMenuIfOpen);
+        document.getElementById('panorama').addEventListener('touchstart', closeMenuIfOpen, {passive: true});
 
         var commonConfig = {
             "type": "multires",
@@ -214,8 +231,14 @@
             }
         }, 100); 
 
-        window.addEventListener('resize', moveControls);
-        document.addEventListener('fullscreenchange', moveControls);
+        window.addEventListener('resize', () => {
+            if (typeof viewer !== 'undefined') viewer.resize();
+            moveControls();
+        });
+        document.addEventListener('fullscreenchange', () => {
+            if (typeof viewer !== 'undefined') viewer.resize();
+            moveControls();
+        });
 
         const observer = new MutationObserver(moveControls);
         observer.observe(document.getElementById('panorama'), { childList: true, subtree: true });
@@ -228,6 +251,5 @@
             document.getElementById('scene-name-display').innerText = btnElement.innerText;
         }
     </script> 
-    
 </body>
 </html>
