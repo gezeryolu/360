@@ -1,17 +1,38 @@
-/* 1. Normal ekrandayken logoyu tamamen gizle */
+/* ================================================================
+   1. NORMAL EKRAN KURALI (Logo bu modda tamamen gizlidir)
+   ================================================================ */
 .gezeryolu-360-logo {
-    display: none;
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 55px; /* Küçük boy boyutu */
-    height: auto;
-    opacity: 0.35; /* Şeffaflık derecesi */
-    z-index: 9999;
-    pointer-events: none;
+    display: none;             /* Logoyu normal ekranda tamamen gizler */
+    position: absolute;        /* Logonun ekranda serbestçe hareket etmesini sağlar */
+    
+    /* --- KONUM AYARLARI --- */
+    top: 28px;                 /* ÖNEMLİ: Kameraya takılmaması için 15px'ten 28px'e çıkardık (Aşağı indirir) */
+    left: 18px;                /* Soldan bırakılacak boşluk mesafesi (İçeri alır) */
+    
+    /* --- BOYUT AYARLARI --- */
+    width: 55px;               /* Logonun genişliği (Büyütmek için artır, küçültmek için azalt) */
+    height: auto;              /* Genişliğe göre yüksekliği otomatik ve orantılı ayarlar */
+    
+    /* --- GÖRÜNÜM AYARLARI --- */
+    opacity: 0.35;             /* Logonun şeffaflığı (%35 belirginlik sunar. Netlik için 0.10 ile 1.0 arası oynayabilirsin) */
+    z-index: 9999;             /* Logonun 360 fotoğrafın arkasında kalmayıp en üstte görünmesini sağlar */
+    pointer-events: none;      /* Logoya tıklandığında 360 fotoğrafın dönme hareketini engellemez */
 }
 
-/* 2. SADECE sağ alttaki tuşla TAM EKRAN yapıldığında logoyu göster */
-#panorama:-webkit-full-screen .gezeryolu-360-logo { display: block; }
-#panorama:-ms-fullscreen .gezeryolu-360-logo { display: block; }
-#panorama:fullscreen .gezeryolu-360-logo { display: block; }
+/* ================================================================
+   2. TAM EKRAN KURALI (Farklı tarayıcılar için tam ekranda logoyu açar)
+   ================================================================ */
+/* Google Chrome, Safari, Opera ve yeni nesil mobil tarayıcılar için tam ekranda göster emri */
+#panorama:-webkit-full-screen .gezeryolu-360-logo { 
+    display: block; 
+}
+
+/* Eski Internet Explorer / Edge tarayıcıları için tam ekranda göster emri */
+#panorama:-ms-fullscreen .gezeryolu-360-logo { 
+    display: block; 
+}
+
+/* Standart ve güncel tüm tarayıcılar (Firefox vb.) için tam ekranda göster emri */
+#panorama:fullscreen .gezeryolu-360-logo { 
+    display: block; 
+}
