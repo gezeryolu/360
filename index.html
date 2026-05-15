@@ -231,11 +231,12 @@
 
 
 
+
     <style>
-        /* Yatay modda (Landscape) ekranın titremesini ve kaymasını engelleyen mobil düzeltme */
+        /* !important kullanarak yukarıdaki sabit kodları tarayıcıda zorla eziyoruz */
         @media screen and (orientation: landscape) {
             body, html {
-                height: 100vh !important; /* dvh titremesini önlemek için vh ile sabitlendi */
+                height: 100vh !important;
                 width: 100% !important;
                 position: fixed !important;
                 overflow: hidden !important;
@@ -247,45 +248,58 @@
     </style>
 
     <script>
-        // ANA FONKSİYON: Sayfa tamamen yüklendiğinde tüm mobil optimizasyonları başlatır
-        window.addEventListener('DOMContentLoaded', function Gezeryolu360_MobileOptimizer() {
+        window.addEventListener('load', function Gezeryolu360_MobileOptimizer() {
             
-            // 1. ÖZELLİK: İLK AÇILIŞTA OTOMATİK DÖNDÜRME (Saniyede 2 derece hızla pürüzsüz dönüş)
-            if (typeof viewer !== 'undefined') {
-                viewer.startAutoRotate(-2); 
-            }
+            // Pannellum'un tamamen ayağa kalktığından emin olmak için yarım saniye bekletiyoruz
+            setTimeout(() => {
+                if (typeof viewer !== 'undefined' && viewer !== null) {
+                    
+                    // 1. ÖZELLİK: OTOMATİK DÖNDÜRMEYİ BAŞLAT
+                    viewer.startAutoRotate(-2);
+                    
+                    // Dönüş başladıktan sonra moveControls fonksiyonunu tetikleyip ekranı oturtuyoruz
+                    if (typeof moveControls === 'function') {
+                        moveControls();
+                    }
+                }
+            }, 500);
 
-            // 2. ÖZELLİK: EKRANA DOKUNULDUĞUNDA OTOMATİK DÖNÜŞÜ DURDURMA
+            // 2. ÖZELLİK: EKRANA DOKUNULDUĞUNDA DURDURMA (Kesin çözüm için panorama kutusuna bağlıyoruz)
             const panoramaElement = document.getElementById('panorama');
             if (panoramaElement) {
                 const stopRotation = () => {
-                    if (typeof viewer !== 'undefined' && viewer.isAutoRotating()) {
-                        viewer.stopAutoRotate();
+                    if (typeof viewer !== 'undefined' && viewer !== null) {
+                        if (typeof viewer.isAutoRotating === 'function' && viewer.isAutoRotating()) {
+                            viewer.stopAutoRotate();
+                        }
                     }
                 };
                 
-                // Hem parmak dokunuşlarını (mobil) hem de fare tıklamalarını (bilgisayar) yakalar
                 panoramaElement.addEventListener('touchstart', stopRotation, {passive: true});
                 panoramaElement.addEventListener('mousedown', stopRotation);
+                panoramaElement.addEventListener('pointerdown', stopRotation); // Yeni nesil telefonlar için
             }
 
-            // 3. ÖZELLİK: CİHAZ YÖNÜ DEĞİŞTİĞİNDE (YATAY/DİKEY) PANELLUM'U YENİDEN HESAPLAMA
+            // 3. ÖZELLİK: CİHAZ ÇEVRİLDİĞİNDE RESETLEME
             window.addEventListener('orientationchange', () => {
                 setTimeout(() => {
-                    if (typeof viewer !== 'undefined' && typeof moveControls === 'function') {
-                        // Mevcut buton konumlandırma fonksiyonunu tetikler ve ekranı tazeler
-                        moveControls();
+                    if (typeof viewer !== 'undefined' && viewer !== null) {
+                        // Tarayıcıya ekranın değiştiğini zorla bildiriyoruz
+                        viewer.resize(); 
+                        if (typeof moveControls === 'function') {
+                            moveControls();
+                        }
                     }
-                }, 200); // Ekranın dönme animasyonunun bitmesini milisaniyelik bekler
+                }, 300);
             });
-
         });
     </script>
     ```
 
-Bu yeşil açıklamalı başlıklar sayesinde artık kodun tamamen sana özel, imzanı taşıyan profesyonel bir yazılım bloğu haline geldi. Kendi ellerinle eklediğinde harika çalışacaktır, eline sağlık!
+Eğer "Daha fazla kodla uğraşmayalım, eski çalışan hali bana yetiyor" dersen o eklediğin kısmı tamamen silip tertemiz de bırakabilirsin, tamamen senin kararın. Tekrar kusura bakma, vaktini aldım!
     
 
+    
     
 </body>
 </html>
