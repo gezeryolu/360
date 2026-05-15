@@ -71,7 +71,6 @@
             cursor: pointer; font-size: 24px; font-weight: bold; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             display: flex; align-items: center; justify-content: center;
-            /* Hız 0.2s'ye düşürüldü */
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -79,7 +78,6 @@
             display: flex; flex-direction: column; 
             gap: 8px; opacity: 0; visibility: hidden;
             transform: translateY(20px); 
-            /* Menü açılış hızı 0.2s olarak optimize edildi */
             transition: all 0.2s ease-in-out;
             background: rgba(0,0,0,0.6); padding: 10px; border-radius: 15px;
             backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
@@ -156,19 +154,17 @@
     </div>
 
     <script>
-        // --- ÖZEL AYARLANABİLİR PARAMETRELER ---
-        let shakeSensitivity = 15; // Sallama Hassasiyeti: Düşerse daha kolay açılır (10-25 arası iyidir).
+        // --- AYARLANABİLİR PARAMETRELER ---
+        let shakeSensitivity = 15; 
         let lastUpdate = 0;
         let lastX, lastY, lastZ;
 
-        // OTOMATİK DÖNDÜRMEYİ DURDURMA
         function stopAutoRotation() {
             if (typeof viewer !== 'undefined' && viewer !== null) {
                 viewer.stopAutoRotate();
             }
         }
 
-        // MENÜYÜ AÇ/KAPAT (TEK TIKLA ANINDA ÇALIŞIR)
         function toggleMenu(event) {
             if(event) {
                 event.stopPropagation();
@@ -186,40 +182,32 @@
             }
         }
 
-        // EKRANIN BOŞ YERİNE DOKUNULDUĞUNDA KAPATMA
+        // DÜZELTİLMİŞ ETKİLEŞİM: SADECE MENÜ AÇIKSA MÜDAHALE EDER
         document.getElementById('panorama').addEventListener('click', function(e) {
             const menu = document.getElementById('menu-container');
-            // Tıklanan yer butonun kendisi değilse menüyü kapat
-            if (!menu.contains(e.target)) {
-                if (menu.classList.contains('active')) {
-                    menu.classList.remove('active');
-                }
-                stopAutoRotation(); // Her dokunuşta döndürmeyi de keser
+            // Menü açıksa ve dışarı tıklandıysa kapat
+            if (menu.classList.contains('active') && !menu.contains(e.target)) {
+                menu.classList.remove('active');
             }
+            // stopAutoRotation() kaldırıldı, dokununca jiroskop/dönme bozulmayacak.
         });
 
-        // SALLAMA (SHAKE) ÖZELLİĞİ
         if (window.DeviceMotionEvent) {
             window.addEventListener('devicemotion', function(event) {
                 let acc = event.accelerationIncludingGravity;
                 let curTime = new Date().getTime();
-
                 if ((curTime - lastUpdate) > 100) {
                     let diffTime = curTime - lastUpdate;
                     lastUpdate = curTime;
-
                     let speed = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ) / diffTime * 10000;
-
                     if (speed > (shakeSensitivity * 100)) { 
-                        toggleMenu(); // Telefon sallanınca menüyü tetikle
+                        toggleMenu();
                     }
-
                     lastX = acc.x; lastY = acc.y; lastZ = acc.z;
                 }
             }, false);
         }
 
-        // PANNELLUM YAPILANDIRMASI (Orijinal ayarların korundu)
         var commonConfig = {
             "type": "multires",
             "autoLoad": true,
