@@ -1,11 +1,17 @@
+/* 1. Normal ekrandayken logoyu tamamen gizle */
 .gezeryolu-360-logo {
+    display: none;
     position: absolute;
     top: 15px;
     left: 15px;
     width: 55px; /* Küçük boy boyutu */
     height: auto;
-    opacity: 0.25; /* %25 hafif şeffaflık */
+    opacity: 0.35; /* Şeffaflık derecesi */
     z-index: 9999;
     pointer-events: none;
 }
 
+/* 2. SADECE sağ alttaki tuşla TAM EKRAN yapıldığında logoyu göster */
+#panorama:-webkit-full-screen .gezeryolu-360-logo { display: block; }
+#panorama:-ms-fullscreen .gezeryolu-360-logo { display: block; }
+#panorama:fullscreen .gezeryolu-360-logo { display: block; }
