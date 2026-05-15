@@ -121,7 +121,7 @@
             margin: 0 !important;
         }
 
-        /* YATAY EKRAN MODU İÇİN ÖZEL DESTEK KURALI */
+        /* YATAY EKRAN ENGELİNİ KALDIRAN KURAL */
         @media screen and (orientation: landscape) {
             body, html, #panorama {
                 height: 100% !important;
@@ -159,24 +159,36 @@
     </div>
 
     <script>
-        // MENÜ AÇMA VE KAPATMA FONKSİYONU (Hem açar hem kapatır)
+        // OTOMATİK DÖNDÜRMEYİ GÜVENLİ DURDURMA FONKSİYONU
+        function stopAutoRotation() {
+            if (typeof viewer !== 'undefined' && viewer !== null) {
+                if (typeof viewer.isAutoRotating === 'function' && viewer.isAutoRotating()) {
+                    viewer.stopAutoRotate();
+                }
+            }
+        }
+
+        // MENÜ AÇMA VE KAPATMA FONKSİYONU (Mavi buton çift yönlü çalışır)
         function toggleMenu(event) {
             if(event) event.stopPropagation();
+            stopAutoRotation(); // Menü açılırken de dönmeyi durdurur
             document.getElementById('menu-container').classList.toggle('active');
         }
 
-        // EKRANIN BOŞ BİR YERİNE DOKUNULDUĞUNDA MENÜYÜ KAPATMA FONKSİYONU
-        function closeMenuIfOpen() {
+        // EKRANIN BOŞ BİR YERİNE DOKUNULDUĞUNDA MENÜYÜ KAPATMA VE DÖNMEYİ DURDURMA
+        function handleScreenInteraction() {
+            stopAutoRotation(); // Parmak dokunduğu an dönmeyi keser
             var menu = document.getElementById('menu-container');
             if (menu && menu.classList.contains('active')) {
                 menu.classList.remove('active');
             }
         }
 
-        // Hem mousedown (fare) hem de touchstart (mobil parmak) tetikleyicileri eklendi
-        document.getElementById('panorama').addEventListener('mousedown', closeMenuIfOpen);
-        document.getElementById('panorama').addEventListener('touchstart', closeMenuIfOpen, {passive: true});
+        // Ekran etkileşimlerini hem fare hem mobil parmak için bağlıyoruz
+        document.getElementById('panorama').addEventListener('mousedown', handleScreenInteraction);
+        document.getElementById('panorama').addEventListener('touchstart', handleScreenInteraction, {passive: true});
 
+        // REPO ENTEGRELİ ANA KONTROL AYARLARI
         var commonConfig = {
             "type": "multires",
             "autoLoad": true,
@@ -221,7 +233,15 @@
             }
         }
 
-        viewer.on('load', moveControls);
+        // Her sahne yüklendiğinde otomatik döndürmeyi saniyede -2 hızla tetikler
+        viewer.on('load', () => {
+            moveControls();
+            setTimeout(() => {
+                if (typeof viewer !== 'undefined' && viewer !== null) {
+                    viewer.startAutoRotate(-2);
+                }
+            }, 300);
+        });
         
         var checkExist = setInterval(function() {
             var pnlmControls = document.querySelector('.pnlm-controls-container');
