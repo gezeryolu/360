@@ -228,5 +228,64 @@
             document.getElementById('scene-name-display').innerText = btnElement.innerText;
         }
     </script>
+
+
+
+    <style>
+        /* Yatay modda (Landscape) ekranın titremesini ve kaymasını engelleyen mobil düzeltme */
+        @media screen and (orientation: landscape) {
+            body, html {
+                height: 100vh !important; /* dvh titremesini önlemek için vh ile sabitlendi */
+                width: 100% !important;
+                position: fixed !important;
+                overflow: hidden !important;
+            }
+            #panorama {
+                height: 100vh !important;
+            }
+        }
+    </style>
+
+    <script>
+        // ANA FONKSİYON: Sayfa tamamen yüklendiğinde tüm mobil optimizasyonları başlatır
+        window.addEventListener('DOMContentLoaded', function Gezeryolu360_MobileOptimizer() {
+            
+            // 1. ÖZELLİK: İLK AÇILIŞTA OTOMATİK DÖNDÜRME (Saniyede 2 derece hızla pürüzsüz dönüş)
+            if (typeof viewer !== 'undefined') {
+                viewer.startAutoRotate(-2); 
+            }
+
+            // 2. ÖZELLİK: EKRANA DOKUNULDUĞUNDA OTOMATİK DÖNÜŞÜ DURDURMA
+            const panoramaElement = document.getElementById('panorama');
+            if (panoramaElement) {
+                const stopRotation = () => {
+                    if (typeof viewer !== 'undefined' && viewer.isAutoRotating()) {
+                        viewer.stopAutoRotate();
+                    }
+                };
+                
+                // Hem parmak dokunuşlarını (mobil) hem de fare tıklamalarını (bilgisayar) yakalar
+                panoramaElement.addEventListener('touchstart', stopRotation, {passive: true});
+                panoramaElement.addEventListener('mousedown', stopRotation);
+            }
+
+            // 3. ÖZELLİK: CİHAZ YÖNÜ DEĞİŞTİĞİNDE (YATAY/DİKEY) PANELLUM'U YENİDEN HESAPLAMA
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    if (typeof viewer !== 'undefined' && typeof moveControls === 'function') {
+                        // Mevcut buton konumlandırma fonksiyonunu tetikler ve ekranı tazeler
+                        moveControls();
+                    }
+                }, 200); // Ekranın dönme animasyonunun bitmesini milisaniyelik bekler
+            });
+
+        });
+    </script>
+    ```
+
+Bu yeşil açıklamalı başlıklar sayesinde artık kodun tamamen sana özel, imzanı taşıyan profesyonel bir yazılım bloğu haline geldi. Kendi ellerinle eklediğinde harika çalışacaktır, eline sağlık!
+    
+
+    
 </body>
 </html>
